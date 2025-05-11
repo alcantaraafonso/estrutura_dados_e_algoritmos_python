@@ -89,6 +89,26 @@ class ListaDuplamenteEncadeada:
             else:
                 no_atual = no_atual.proximo_no
         return no_atual
+    
+    def excluir_element(self, element):
+        if self.__lista_vazia():
+            return None
+        atual = self.__cabela_lista_primeiro_no
+        while atual.element != element:
+            atual = atual.proximo_no
+            if atual == None:
+                return None
+
+        if atual == self.__cabela_lista_primeiro_no:
+            self.__cabela_lista_primeiro_no = atual.proximo_no
+        else:
+            atual.no_anterior.proximo_no = atual.proximo_no
+
+        if atual == self.__cabela_lista_ultimo_no:
+            self.__cabela_lista_ultimo_no = atual.no_anterior
+        else:
+            atual.proximo_no.no_anterior = atual.no_anterior
+        return atual
 
 ## insere no inicio
 
@@ -99,8 +119,8 @@ lista.insere_inicio(2)
 lista.insere_inicio(3)
 lista.insere_inicio(4)
 lista.insere_inicio(5)
-lista. mostrar_do_inicio()
-lista. mostrar_do_final()
+# lista. mostrar_do_inicio()
+# lista. mostrar_do_final()
 
 ## Insere Final
 # lista.insere_final(6)
@@ -117,12 +137,23 @@ lista. mostrar_do_final()
 #     print('Não encontrado: ', pesquisa)
 
 ## Excluir iniicio
-lista.excluir_inicio()
-lista.mostrar_do_inicio()
+# lista.excluir_inicio()
+# lista.mostrar_do_inicio()
 
 ## Excluir final
-lista.excluir_final()
+# lista.excluir_final()
+# lista.mostrar_do_inicio()
+
+## Excluir posição
+lista.excluir_element(3)
 lista.mostrar_do_inicio()
+
+lista.excluir_element(5)
+lista.mostrar_do_inicio()
+lista.excluir_element(1)
+lista.mostrar_do_inicio()
+
+
 
 # lista.excluir_inicio()
 # lista.mostrar()
