@@ -146,61 +146,61 @@ class ArvoreBinariaBusca:
             self.travessia_pos_ordem(no_atual.no_da_direita)
             print(no_atual.element)
 
-    def excluir_no(self, element):
-        if self.arvore_vazia():
-            print('Árvore vazia')
-            return
-        no_atual = no_pai = self._raiz
-        is_esquerda = True
-        while element != no_atual.element:
-            no_pai = no_atual
-            if element < no_atual.element:
-                is_esquerda = True
-                no_atual = no_atual.no_da_esquerda
-            else:
-                is_esquerda = False
-                no_atual = no_atual.no_da_direita
-            if no_atual == None:
-                return False
+    # def excluir_no(self, element):
+    #     if self.arvore_vazia():
+    #         print('Árvore vazia')
+    #         return
+    #     no_atual = no_pai = self._raiz
+    #     is_esquerda = True
+    #     while element != no_atual.element:
+    #         no_pai = no_atual
+    #         if element < no_atual.element:
+    #             is_esquerda = True
+    #             no_atual = no_atual.no_da_esquerda
+    #         else:
+    #             is_esquerda = False
+    #             no_atual = no_atual.no_da_direita
+    #         if no_atual == None:
+    #             return False
             
-        # Nó atual é uma folha
-        if no_atual.no_da_esquerda == None and no_atual.no_da_direita == None:
-            if no_atual == self._raiz:
-                self._raiz = None
-            elif is_esquerda:
-                no_pai.no_da_esquerda = None
-            else:
-                no_pai.no_da_direita = None
+    #     # Nó atual é uma folha
+    #     if no_atual.no_da_esquerda == None and no_atual.no_da_direita == None:
+    #         if no_atual == self._raiz:
+    #             self._raiz = None
+    #         elif is_esquerda:
+    #             no_pai.no_da_esquerda = None
+    #         else:
+    #             no_pai.no_da_direita = None
 
-        # o nó a ser apagado não possui filho na direita
-        elif no_atual.no_da_direita == None:
-            if no_atual == self._raiz:
-                self._raiz = no_atual.no_da_esquerda
-            elif is_esquerda:
-                no_pai.no_da_esquerda = no_atual.no_da_esquerda
-            else:
-                no_pai.no_da_direita = no_atual.no_da_esquerda
-        # o nó a ser apagado não possui filho na esquerda 
-        elif no_atual.no_da_esquerda == None:
-            if no_atual == self._raiz:
-                self._raiz = no_atual.no_da_direita
-            elif is_esquerda:
-                no_pai.no_da_esquerda = no_atual.no_da_direita
-            else:
-                no_pai.no_da_direita = no_atual.no_da_direita
+    #     # o nó a ser apagado não possui filho na direita
+    #     elif no_atual.no_da_direita == None:
+    #         if no_atual == self._raiz:
+    #             self._raiz = no_atual.no_da_esquerda
+    #         elif is_esquerda:
+    #             no_pai.no_da_esquerda = no_atual.no_da_esquerda
+    #         else:
+    #             no_pai.no_da_direita = no_atual.no_da_esquerda
+    #     # o nó a ser apagado não possui filho na esquerda 
+    #     elif no_atual.no_da_esquerda == None:
+    #         if no_atual == self._raiz:
+    #             self._raiz = no_atual.no_da_direita
+    #         elif is_esquerda:
+    #             no_pai.no_da_esquerda = no_atual.no_da_direita
+    #         else:
+    #             no_pai.no_da_direita = no_atual.no_da_direita
 
-        # o nó a ser apagado tem dois filhos
-        else:
-            sucessor = self.get_sucessor(no_atual)
-            if no_atual == self._raiz:
-                self._raiz = sucessor
-            elif is_esquerda:
-                no_pai.no_da_esquerda = sucessor
-            else:
-                no_pai.no_da_direita = sucessor
-            sucessor.no_da_esquerda = no_atual.no_da_esquerda
+    #     # o nó a ser apagado tem dois filhos
+    #     else:
+    #         sucessor = self.get_sucessor(no_atual)
+    #         if no_atual == self._raiz:
+    #             self._raiz = sucessor
+    #         elif is_esquerda:
+    #             no_pai.no_da_esquerda = sucessor
+    #         else:
+    #             no_pai.no_da_direita = sucessor
+    #         sucessor.no_da_esquerda = no_atual.no_da_esquerda
 
-        return True
+    #     return True
 
 
     def get_sucessor(self, no: No):
@@ -217,6 +217,33 @@ class ArvoreBinariaBusca:
             pai_sucessor.no_da_esquerda = sucessor.no_da_direita
             sucessor.no_da_direita = no
         return sucessor
+
+
+    def excluir_no(self, valor):
+        def remover_no(no, valor):
+            if no is None:
+                return no
+            if valor < no.element:
+                no.no_da_esquerda = remover_no(no.no_da_esquerda, valor)
+            elif valor > no.element:
+                no.no_da_direita = remover_no(no.no_da_direita, valor)
+            else:
+                # Caso 1: Nó folha
+                if no.no_da_esquerda is None and no.no_da_direita is None:
+                    return None
+                # Caso 2: Um filho
+                elif no.no_da_esquerda is None:
+                    return no.no_da_direita
+                elif no.no_da_direita is None:
+                    return no.no_da_esquerda
+                # Caso 3: Dois filhos
+                else:
+                    sucessor = self.get_sucessor(no)
+                    no.element = sucessor.element
+                    no.no_da_direita = remover_no(no.no_da_direita, sucessor.element)
+            return no
+    
+        self._raiz = remover_no(self._raiz, valor)
 
 arvore = ArvoreBinariaBusca()
 
